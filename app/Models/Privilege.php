@@ -20,7 +20,7 @@ class Privilege extends Model
 
     protected $guarded = [];
 
-    public function privileges()
+    public function employees()
     {
         return $this->belongsToMany(Employee::class, 'employee_privileges');
     }
