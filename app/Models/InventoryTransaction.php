@@ -27,5 +27,28 @@ class InventoryTransaction extends Model
 
     protected $guarded = [];
 
-        
+    public function inventoryTransactionType()
+    {
+        return $this->belongsTo(InventoryTransaction::class, 'transaction_type');
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    public function purchaseOrder()
+    {
+        return $this->belongsTo(PurchaseOrder::class, 'purchase_order_id');
+    }
+
+    public function purchaseOrderDetails()
+    {
+        return $this->belongsTo(PurchaseOrderDetail::class, 'purchase_order_id');
+    }
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'customer_order_id');
+    }
 }

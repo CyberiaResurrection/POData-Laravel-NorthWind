@@ -35,10 +35,8 @@ class Supplier extends Model
     ];
 
     protected $guarded = [];
-    /**
-     * Get the comments for the blog post.
-     */
-    public function PurchaseOrders()
+
+    public function purchaseOrders()
     {
         return $this->hasMany('App\Models\PurchaseOrder');
     }

@@ -20,8 +20,8 @@ class PurchaseOrderStatus extends Model
 
     protected $guarded = [];
 
-    public function PurchaseOrders()
+    public function purchaseOrders()
     {
-        return $this->hasMany('App\Models\PurchaseOrder');
+        return $this->hasMany('App\Models\PurchaseOrder', 'status_id');
     }
 }

@@ -36,5 +36,18 @@ class Employee extends Model
 
     protected $guarded = [];
 
-        
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'employee_id');
+    }
+
+    public function purchaseOrders()
+    {
+        return $this->hasMany(PurchaseOrder::class, 'employee_id');
+    }
+
+    public function privileges()
+    {
+        return $this->belongsToMany(Privilege::class, 'employee_privileges');
+    }
 }

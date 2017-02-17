@@ -36,5 +36,8 @@ class Shipper extends Model
 
     protected $guarded = [];
 
-        
+    public function orders()
+    {
+        return $this->hasMany('App\Models\Shipper', 'shipper_id');
+    }
 }

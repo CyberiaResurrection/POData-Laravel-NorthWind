@@ -32,5 +32,18 @@ class Product extends Model
 
     protected $guarded = [];
 
-        
+    public function orderDetails()
+    {
+        return $this->hasMany('App\Models\OrderDetail', 'product_id');
+    }
+
+    public function purchaseOrderDetails()
+    {
+        return $this->hasMany(PurchaseOrderDetail::class, 'product_id');
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'product_id');
+    }
 }

@@ -20,5 +20,8 @@ class OrdersTaxStatus extends Model
 
     protected $guarded = [];
 
-        
+    public function orders()
+    {
+        return $this->hasMany('App\Models\OrdersTaxStatus', 'tax_status_id');
+    }
 }

@@ -34,11 +34,28 @@ class PurchaseOrder extends Model
 
     protected $guarded = [];
 
-    public function Supplier()
+    public function supplier()
     {
         return $this->belongsTo('App\Models\Supplier');
     }
-    public function PurchaseOrderStatus(){
+
+    public function purchaseOrderStatus()
+    {
         return $this->belongsTo('App\Models\PurchaseOrderStatus', 'status_id');
+    }
+
+    public function purchaseOrderDetails()
+    {
+        return $this->hasMany(PurchaseOrderDetail::class, 'purchase_order_id');
+    }
+
+    public function employee()
+    {
+        return $this->belongsTo('App\Models\Employee', 'employee_id');
+    }
+
+    public function inventoryTransactions()
+    {
+        return $this->hasMany(InventoryTransaction::class, 'purchase_order_id');
     }
 }
