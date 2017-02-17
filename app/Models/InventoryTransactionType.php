@@ -20,5 +20,9 @@ class InventoryTransactionType extends Model
 
     protected $guarded = [];
 
+    public function inventoryTransactions()
+    {
+        return $this->hasMany('App\Models\InventoryTransaction', 'transaction_type', 'id');
+    }
         
 }

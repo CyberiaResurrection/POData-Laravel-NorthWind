@@ -38,5 +38,40 @@ class Order extends Model
 
     protected $guarded = [];
 
+    public function OrderStatus()
+    {
+        return $this->belongsTo('App\Models\OrdersStatus', 'status_id');
+    } 
+	public function OrderStatus()
+    {
+        return $this->belongsTo('App\Models\OrdersTaxStatus', 'tax_status_id');
+    }
+	public function Shipper()
+    {
+        return $this->belongsTo('App\Models\Shipper', 'shipper_id');
+    }
+	public function Employee()
+    {
+        return $this->belongsTo('App\Models\Employee', 'employee_id');
+    }
+
+	public function Customer()
+    {
+        return $this->belongsTo('App\Models\Customer', 'customer_id');
+    }
+
+	public function Invoice()
+    {
+        return $this->hasOne('App\Models\Invoice');
+    }
+	public function OrderDetail()
+    {
+        return $this->hasMany('App\Models\OrderDetail');
+    }
+
+	public function InventoryTransaction()
+    {
+        return $this->hasMany('App\Models\InventoryTransaction', 'customer_order_id');
+    }
         
 }

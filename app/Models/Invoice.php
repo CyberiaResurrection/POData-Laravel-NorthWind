@@ -25,5 +25,8 @@ class Invoice extends Model
 
     protected $guarded = [];
 
-        
+    public function Order()
+    {
+        return $this->belongsTo('App\Models\Order');
+    }   
 }
