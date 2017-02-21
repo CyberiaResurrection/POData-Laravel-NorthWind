@@ -22,6 +22,6 @@ class OrdersTaxStatus extends Model
 
     public function orders()
     {
-        return $this->hasMany('App\Models\OrdersTaxStatus', 'tax_status_id');
+        return $this->hasMany('App\Models\Order', 'tax_status_id');
     }
 }

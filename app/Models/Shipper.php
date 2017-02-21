@@ -38,6 +38,6 @@ class Shipper extends Model
 
     public function orders()
     {
-        return $this->hasMany('App\Models\Shipper', 'shipper_id');
+        return $this->hasMany('App\Models\Order', 'shipper_id');
     }
 }

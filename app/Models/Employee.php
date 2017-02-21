@@ -43,7 +43,7 @@ class Employee extends Model
 
     public function purchaseOrders()
     {
-        return $this->hasMany(PurchaseOrder::class, 'employee_id');
+        return $this->hasMany(PurchaseOrder::class, 'created_by');
     }
 
     public function privileges()

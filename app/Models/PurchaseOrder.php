@@ -51,7 +51,7 @@ class PurchaseOrder extends Model
 
     public function employee()
     {
-        return $this->belongsTo('App\Models\Employee', 'employee_id');
+        return $this->belongsTo('App\Models\Employee', 'created_by');
     }
 
     public function inventoryTransactions()
