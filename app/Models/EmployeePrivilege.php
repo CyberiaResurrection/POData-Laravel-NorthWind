@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class EmployeePrivilege extends Model
 {
-    use \AlgoWeb\PODataLaravel\Models\MetadataTrait;
+//    use \AlgoWeb\PODataLaravel\Models\MetadataTrait;
     protected $table = 'employee_privileges';
 
     public $timestamps = false;
