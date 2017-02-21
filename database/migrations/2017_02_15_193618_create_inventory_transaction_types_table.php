@@ -14,7 +14,7 @@ class CreateInventoryTransactionTypesTable extends Migration {
 	{
 		Schema::create('inventory_transaction_types', function(Blueprint $table)
 		{
-			$table->boolean('id')->primary();
+                        $table->integer('id')->primary()->unsigned();
 			$table->string('type_name', 50);
 		});
 	}
