@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class String
  */
-class String extends Model
+class StringModel extends Model
 {
     use \AlgoWeb\PODataLaravel\Models\MetadataTrait;
     protected $table = 'strings';
