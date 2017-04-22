@@ -32,8 +32,8 @@ class CreateOrdersTable extends Migration {
 			$table->dateTime('paid_date')->nullable();
 			$table->text('notes')->nullable();
 			$table->float('tax_rate', 10, 0)->nullable()->default(0);
-			$table->boolean('tax_status_id')->nullable()->index('tax_status');
-			$table->boolean('status_id')->nullable()->default(0)->index('fk_orders_orders_status1');
+			$table->integer('tax_status_id')->nullable()->index('tax_status');
+			$table->integer('status_id')->nullable()->default(0)->index('fk_orders_orders_status1');
 		});
 	}
 

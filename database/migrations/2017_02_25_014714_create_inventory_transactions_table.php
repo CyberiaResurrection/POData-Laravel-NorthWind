@@ -15,7 +15,7 @@ class CreateInventoryTransactionsTable extends Migration {
 		Schema::create('inventory_transactions', function(Blueprint $table)
 		{
 			$table->integer('id', true);
-			$table->integer('transaction_type')->unsigned()->index('transaction_type');
+			$table->integer('transaction_type')->index('transaction_type');
 			$table->dateTime('transaction_created_date')->nullable();
 			$table->dateTime('transaction_modified_date')->nullable();
 			$table->integer('product_id')->index('product_id_2');

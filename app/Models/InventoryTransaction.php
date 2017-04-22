@@ -29,7 +29,7 @@ class InventoryTransaction extends Model
 
     public function inventoryTransactionType()
     {
-        return $this->belongsTo(InventoryTransaction::class, 'transaction_type');
+        return $this->belongsTo('App\Models\InventoryTransactionType', 'transaction_type');
     }
 
     public function product()
@@ -39,7 +39,7 @@ class InventoryTransaction extends Model
 
     public function purchaseOrder()
     {
-        return $this->belongsTo(PurchaseOrder::class, 'purchase_order_id');
+        return $this->belongsTo('App\Models\PurchaseOrder', 'purchase_order_id');
     }
 
     public function purchaseOrderDetails()

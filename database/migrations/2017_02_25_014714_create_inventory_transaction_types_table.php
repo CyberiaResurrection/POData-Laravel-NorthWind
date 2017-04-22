@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateOrdersTaxStatusTable extends Migration {
+class CreateInventoryTransactionTypesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,10 +12,10 @@ class CreateOrdersTaxStatusTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('orders_tax_status', function(Blueprint $table)
+		Schema::create('inventory_transaction_types', function(Blueprint $table)
 		{
-			$table->boolean('id')->primary();
-			$table->string('tax_status_name', 50);
+			$table->integer('id')->primary();
+			$table->string('type_name', 50);
 		});
 	}
 
@@ -27,7 +27,7 @@ class CreateOrdersTaxStatusTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('orders_tax_status');
+		Schema::drop('inventory_transaction_types');
 	}
 
 }

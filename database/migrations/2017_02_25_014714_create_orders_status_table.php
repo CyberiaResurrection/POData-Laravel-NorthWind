@@ -14,7 +14,7 @@ class CreateOrdersStatusTable extends Migration {
 	{
 		Schema::create('orders_status', function(Blueprint $table)
 		{
-			$table->boolean('id')->primary();
+			$table->integer('id')->primary();
 			$table->string('status_name', 50);
 		});
 	}
