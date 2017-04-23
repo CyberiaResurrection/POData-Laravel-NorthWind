@@ -28,7 +28,13 @@ class ServiceDocumentTest extends TestCase
         $response = $this->call('GET', '/odata.svc');
         $xml = new DOMDocument();
         $xml->loadXML($response->content());
-        $this->assertTrue($xml->relaxNGValidateSource(base64_decode($rule)));
+
+        try{
+            $this->assertTrue($xml->relaxNGValidateSource(base64_decode($rule)));
+        }catch (Exception $e) {
+            $this->fail($e->getMessage() . 'RelaxNG Input: ' . base64_decode($rule));
+        }
+
     }
 
     public function RngRulesProvider()
@@ -45,7 +51,6 @@ class ServiceDocumentTest extends TestCase
      */
     public function testXMLRulesXSLTRNG($rule)
     {
-
         $response = $this->call('GET', '/odata.svc');
 
         $xml = new DOMDocument();
@@ -58,7 +63,11 @@ class ServiceDocumentTest extends TestCase
         $xsl->loadXML( base64_decode($rule));
         $xslt->importStylesheet( $xsl );
         $rng = $xslt->transformToXML( $xsl );
-        $this->assertTrue($xml->relaxNGValidateSource($rng));
+        try{
+            $this->assertTrue($xml->relaxNGValidateSource($rng));
+        }catch (Exception $e) {
+            $this->fail($e->getMessage() . 'RelaxNG Input: ' . $rng);
+        }
     }
 
     public function XSLTRngRulesProvider()
