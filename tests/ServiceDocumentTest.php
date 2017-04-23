@@ -56,8 +56,8 @@ class ServiceDocumentTest extends TestCase
 
         $xsl = new DOMDocument();
         $xsl->loadXML( base64_decode($rule));
-        $xslt->importStylesheet( $XSL );
-        $rng = $xslt->transformToXML( $XML )->saveXML();
+        $xslt->importStylesheet( $xsl );
+        $rng = $xslt->transformToXML( $xsl );
         $this->assertTrue($xml->relaxNGValidateSource($rng));
     }
 
