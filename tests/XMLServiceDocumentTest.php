@@ -77,7 +77,7 @@ class ServiceDocumentTest extends TestCase
 
         $response = $this->call('GET', '/odata.svc');
         $fieldValue = $response->headers->get($field);
-        $this->assertEquals(1,preg_match($Regex,$fieldValue));
+        $this->assertEquals(1,preg_match($Regex,$fieldValue),"field Was: " . $fieldValue);
     }
 
     public function RegExHeaderRulesProvider()
