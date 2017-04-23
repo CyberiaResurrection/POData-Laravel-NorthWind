@@ -81,18 +81,21 @@ class ServiceDocumentTest extends TestCase
     /**
      * @dataProvider RegExHeaderRulesProvider
      */
-    public function testHeaders($field,$Regex)
+    public function testHeaders($field,$Regex,$searchString)
     {
 
         $response = $this->call('GET', '/odata.svc');
         $fieldValue = $response->headers->get($field);
-        $this->assertEquals(1,preg_match($Regex,$fieldValue),"field Was: " . $fieldValue);
+        if(null != $searchString){
+            $this->assertTrue(str_contains($fieldValue,$searchString),"could not locate search string: " . $searchString . " within Field: ". $field);
+        }
+        $this->assertEquals(1,preg_match($Regex,$fieldValue),"Field: " . $field .' had value: ' . $fieldValue . " which is not matched by regex: " . $Regex);
     }
 
     public function RegExHeaderRulesProvider()
     {
         return [
-            'AtomPub Service Documents MUST be identified with the \'application/atomsvc+xml\' Content Type. [2.2.3.7.1]' => ["Content-Type", "/.*application\/atomsvc\+xml.*/"]
+            'AtomPub Service Documents MUST be identified with the \'application/atomsvc+xml\' Content Type. [2.2.3.7.1]' => ["Content-Type", "/.*application\/atomsvc\+xml.*/", "application/atomsvc+xml" ]
         ];
     }
 }
