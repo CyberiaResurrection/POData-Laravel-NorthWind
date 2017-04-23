@@ -16,7 +16,7 @@ class JSONServiceDocumentTest extends TestCase
     public function testJsonRules($rule,$jsonType)
     {
         $rule= base64_decode($rule);
-        $response = $this->call('GET', '/odata.svc',[],[],[],["Accept" => "application/json;odata=verbose", "MaxDataServiceVersion" => "3.0"]);
+        $response = $this->call('GET', '/odata.svc',[],[],[],["HTTP_ACCEPT" => "application/json;odata=verbose", "MaxDataServiceVersion" => "3.0"]);
         $content = $response->content();
         $validator = new JsonSchema\Validator;
 
