@@ -9,7 +9,8 @@
         "laravel/framework": "5.1.*",
         "algo-web/podata-laravel": "dev-master",
         "orangehill/iseed": "2.2",
-        "mpociot/laravel-test-factory-helper": "^0.4.0"
+        "mpociot/laravel-test-factory-helper": "^0.4.0",
+        "justinrainbow/json-schema": "^5.0@dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
