@@ -10,16 +10,16 @@ class XMLXSDMetadataTest extends TestCase
     public function GetMetadataDocument($version){
         switch($version){
             case 1:
-                $version = "1.0";
+                $version = "1.0;";
                 break;
             case 2:
-                $version = "2.0";
+                $version = "2.0;";
                 break;
             case 3:
-                $version = "3.0";
+                $version = "3.0;";
                 break;
             case 4:
-                $version = "4.0";
+                $version = "4.0;";
                 break;
             default:
                 $this->fail("Requested a version not between 1 and 4");
@@ -30,7 +30,7 @@ class XMLXSDMetadataTest extends TestCase
     }
 
     public function testV1MetadataAgainstXSD(){
-        $response = GetMetadataDocument(1);
+        $response = $this->GetMetadataDocument(1);
 
         $xml = new DOMDocument();
         $xml->loadXML($response->content());
@@ -39,7 +39,7 @@ class XMLXSDMetadataTest extends TestCase
 
 
     public function testV2MetadataAgainstXSD(){
-        $response = GetMetadataDocument(2);
+        $response = $this->GetMetadataDocument(2);
 
         $xml = new DOMDocument();
         $xml->loadXML($response->content());
@@ -47,7 +47,7 @@ class XMLXSDMetadataTest extends TestCase
     }
 
     public function testV3MetadataAgainstXSD(){
-        $response = GetMetadataDocument(3);
+        $response = $this->GetMetadataDocument(3);
 
         $xml = new DOMDocument();
         $xml->loadXML($response->content());
@@ -56,7 +56,7 @@ class XMLXSDMetadataTest extends TestCase
 
     public function testV4MetadataAgainstXSD(){
         $this->markTestSkipped("Odata Version 4 Not Implomented");
-        $response = GetMetadataDocument(4);
+        $response = $this->GetMetadataDocument(4);
 
         $xml = new DOMDocument();
         $xml->loadXML($response->content());

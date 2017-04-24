@@ -17,17 +17,17 @@ class JSONServiceDocumentTest extends TestCase
         }
         switch($version){
             case 1:
-                $version = "1.0";
+                $version = "1.0;";
                 break;
             case 2:
-                $version = "2.0";
+                $version = "2.0;";
                 break;
             case 3:
-                $version = "3.0";
+                $version = "3.0;";
                 break;
             case 4:
                 $this->markTestSkipped("Odata Version 4 not implomented yet");
-                $version = "4.0";
+                $version = "4.0;";
                 break;
             default:
                 $this->fail("Requested a version not between 1 and 4");
@@ -38,14 +38,9 @@ class JSONServiceDocumentTest extends TestCase
         return $response;
     }
 
-
-    /**
-     * @dataProvider JsonSchemaRulesProvider
-     */
-    public function testJsonRules($rule,$jsonType,$odataVerision)
-    {
+    public function JsonRulesTest($rule,$jsonType,$odataVerision){
         $rule= base64_decode($rule);
-        $response = $this->call('GET', '/odata.svc',[],[],[],["HTTP_ACCEPT" => "application/json;odata=verbose", "DataServiceVersion" => "3.0", "MaxDataServiceVersion" => "3.0"]);
+        $response = $this->GetServiceDocument($jsonType,$odataVerision);
         $content = $response->content();
         $validator = new JsonSchema\Validator;
 
@@ -57,6 +52,18 @@ class JSONServiceDocumentTest extends TestCase
             $message .= sprintf("[%s] %s\n", $error['property'], $error['message']);
         }
         $this->assertTrue($validator->isValid(),$message . "\n ValidationData: " . $rule);
+
+
+    }
+
+    /**
+     * @dataProvider JsonSchemaRulesProvider
+     */
+    public function testJsonRules($rule,$jsonType,$odataVerisions)
+    {
+        foreach($odataVerisions as $version){
+            $this->JsonRulesTest($rule,$jsonType,$version);
+        }
     }
 
     public function JsonSchemaRulesProvider()
@@ -106,18 +113,26 @@ class JSONServiceDocumentTest extends TestCase
     }*/
 
 
-    /**
-     * @dataProvider RegExHeaderRulesProvider
-     */
-    public function testHeaders($field,$Regex,$searchString,$odataVerision)
+    public function HeadersTest($field,$Regex,$searchString,$odataVerision)
     {
-
-        $response = $this->call('GET', '/odata.svc');
+        $response = $this->GetServiceDocument("verbose",$odataVerision);
         $fieldValue = $response->headers->get($field);
         if(null != $searchString){
             $this->assertTrue(str_contains($fieldValue,$searchString),"could not locate search string: " . $searchString . " within Field: ". $field . " FieldValue: " . $fieldValue);
         }
         $this->assertEquals(1,preg_match($Regex,$fieldValue),"Field: " . $field .' had value: ' . $fieldValue . " which is not matched by regex: " . $Regex);
+    }
+
+
+    /**
+     * @dataProvider RegExHeaderRulesProvider
+     */
+
+    public function testHeaders($field,$Regex,$searchString,$odataVerisions)
+    {
+        foreach($odataVerisions as $version){
+            $this->HeadersTest($field,$Regex,$searchString,$version);
+        }
     }
 
     public function RegExHeaderRulesProvider()

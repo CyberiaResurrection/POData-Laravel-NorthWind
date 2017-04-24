@@ -22,16 +22,16 @@ class XMLServiceDocumentTest extends TestCase
     public function GetServiceDocument($version){
         switch($version){
             case 1:
-                $version = "1.0";
+                $version = "1.0;";
                 break;
             case 2:
-                $version = "2.0";
+                $version = "2.0;";
                 break;
             case 3:
-                $version = "3.0";
+                $version = "3.0;";
                 break;
             case 4:
-                $version = "4.0";
+                $version = "4.0;";
                 $this->markTestSkipped("Odata Version 4 not implomented yet");
                 break;
             default:
@@ -41,14 +41,9 @@ class XMLServiceDocumentTest extends TestCase
         $this->assertEquals($version,$response->headers->get("DataServiceVersion"));
         return $response;
     }
-
-
-    /**
-     * @dataProvider RngRulesProvider
-     */
-    public function testXMLRulesRNG($rule,$odataVerision)
+    public function XMLRulesRNGTest($rule,$odataVerision)
     {
-        $response = $this->call('GET', '/odata.svc');
+        $response = $this->GetServiceDocument($odataVerision);
         $xml = new DOMDocument();
         $xml->loadXML($response->content());
 
@@ -60,6 +55,19 @@ class XMLServiceDocumentTest extends TestCase
 
     }
 
+
+
+
+    /**
+     * @dataProvider RngRulesProvider
+     */
+    public function testXMLRulesRNG($rule,$odataVerision)
+    {
+       foreach($odataVerision as $version){
+           $this->XMLRulesRNGTest($rule,$version);
+       }
+    }
+
     public function RngRulesProvider()
     {
         return [
@@ -69,12 +77,10 @@ class XMLServiceDocumentTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider XSLTRngRulesProvider
-     */
-    public function testXMLRulesXSLTRNG($rule,$odataVerision)
+
+    public function XMLRulesXSLTRNGTest($rule,$odataVerision)
     {
-        $response = $this->call('GET', '/odata.svc');
+        $response = $this->GetServiceDocument($odataVerision);
 
         $xml = new DOMDocument();
         $xml->loadXML($response->content());
@@ -93,6 +99,17 @@ class XMLServiceDocumentTest extends TestCase
         }
     }
 
+    /**
+     * @dataProvider XSLTRngRulesProvider
+     */
+    public function testXMLRulesXSLTRNG($rule,$odataVerision)
+    {
+       foreach($odataVerision as $version){
+           $this->XMLRulesXSLTRNGTest($rule,$version);
+       }
+
+    }
+
     public function XSLTRngRulesProvider()
     {
         return [
@@ -100,14 +117,10 @@ class XMLServiceDocumentTest extends TestCase
         ];
     }
 
-
-    /**
-     * @dataProvider RegExHeaderRulesProvider
-     */
-    public function testHeaders($field,$Regex,$searchString,$odataVerision)
+    public function HeadersTest($field,$Regex,$searchString,$odataVerision)
     {
 
-        $response = $this->call('GET', '/odata.svc');
+        $response = $this->GetServiceDocument($odataVerision);
         $fieldValue = $response->headers->get($field);
         if(null != $searchString){
             $this->assertTrue(str_contains($fieldValue,$searchString),"could not locate search string: " . $searchString . " within Field: ". $field);
@@ -115,6 +128,16 @@ class XMLServiceDocumentTest extends TestCase
         $this->assertEquals(1,preg_match($Regex,$fieldValue),"Field: " . $field .' had value: ' . $fieldValue . " which is not matched by regex: " . $Regex);
     }
 
+    /**
+     * @dataProvider RegExHeaderRulesProvider
+     */
+    public function testHeaders($field,$Regex,$searchString,$odataVerision)
+    {
+       foreach($odataVerision as $version){
+           $this->HeadersTest($field,$Regex,$searchString,$version);
+       }
+
+    }
     public function RegExHeaderRulesProvider()
     {
         return [

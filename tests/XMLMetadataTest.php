@@ -10,17 +10,17 @@ class XMLMetadataTest extends TestCase
     public function GetMetadataDocument($version){
         switch($version){
             case 1:
-                $version = "1.0";
+                $version = "1.0;";
                 break;
             case 2:
-                $version = "2.0";
+                $version = "2.0;";
                 break;
             case 3:
-                $version = "3.0";
+                $version = "3.0;";
                 break;
             case 4:
                 $this->markTestSkipped("Odata Version 4 not implomented yet");
-                $version = "4.0";
+                $version = "4.0;";
                 break;
             default:
                 $this->fail("Requested a version not between 1 and 4");
@@ -32,7 +32,7 @@ class XMLMetadataTest extends TestCase
 
      public function testNamespaceHeaderV1()
     {
-        $response = $this->GetMetadataDocument(2);
+        $response = $this->GetMetadataDocument(1);
         $xml = new DOMDocument();
         $xml->loadXML($response->content());
         $this->assertEquals("edmx:Edmx",$xml->firstChild->nodeName);
@@ -134,12 +134,10 @@ class XMLMetadataTest extends TestCase
             $this->assertEquals("http://docs.oasis-open.org/odata/ns/edm",$node->namespaceURI);
         }
     }
-    /**
-     * @dataProvider XSLTRngRulesProvider
-     */
-    public function testXMLRulesXSLTRNG($rule,$odataVersion)
+
+    public function XMLRulesXSLTRNGTest($rule,$odataVersion)
     {
-        $response = $this->call('GET', '/odata.svc/$metadata');
+        $response = $this->GetMetadataDocument($odataVersion);
 
         $xml = new DOMDocument();
         $xml->loadXML($response->content());
@@ -158,6 +156,17 @@ class XMLMetadataTest extends TestCase
         }
     }
 
+
+    /**
+     * @dataProvider XSLTRngRulesProvider
+     */
+    public function testXMLRulesXSLTRNG($rule,$odataVersions)
+    {
+        foreach($odataVersions as $version){
+            $this->XMLRulesXSLTRNGTest($rule,$odataVersions);
+        }
+    }
+
     public function XSLTRngRulesProvider()
     {
         return [
@@ -173,18 +182,25 @@ class XMLMetadataTest extends TestCase
     }
 
 
-    /**
-     * @dataProvider RegExHeaderRulesProvider
-     */
-    public function testHeaders($field,$Regex,$searchString,$odataVersion)
+    public function HeadersTest($field,$Regex,$searchString,$odataVersion)
     {
-
-        $response = $this->call('GET', '/odata.svc');
+        $response = $this->GetMetadataDocument($odataVersion);
         $fieldValue = $response->headers->get($field);
         if(null != $searchString){
             $this->assertTrue(str_contains($fieldValue,$searchString),"could not locate search string: " . $searchString . " within Field: ". $field);
         }
         $this->assertEquals(1,preg_match($Regex,$fieldValue),"Field: " . $field .' had value: ' . $fieldValue . " which is not matched by regex: " . $Regex);
+    }
+
+
+    /**
+     * @dataProvider RegExHeaderRulesProvider
+     */
+    public function testHeaders($field,$Regex,$searchString,$odataVersions)
+    {
+        foreach($odataVersions as $version){
+            $this->HeadersTest($field,$Regex,$searchString,$version);
+        }
     }
 
     public function RegExHeaderRulesProvider()
