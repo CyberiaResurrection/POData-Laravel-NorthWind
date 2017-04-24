@@ -163,7 +163,7 @@ class XMLMetadataTest extends TestCase
     public function testXMLRulesXSLTRNG($rule,$odataVersions)
     {
         foreach($odataVersions as $version){
-            $this->XMLRulesXSLTRNGTest($rule,$odataVersions);
+            $this->XMLRulesXSLTRNGTest($rule,$version);
         }
     }
 
