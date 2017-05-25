@@ -15,7 +15,7 @@ class XMLServiceDocumentTest extends TestCase
     {
         $this->visit('/odata.svc')
              ->see('xmlns:atom="http://www.w3.org/2005/Atom"')
-             ->see('xml:base="http://localhost/odata.svc"')
+             ->see('xml:base="http://localhost/odata.svc/"')
              ->see('xmlns="http://www.w3.org/2007/app"');
 
     }
@@ -64,6 +64,11 @@ class XMLServiceDocumentTest extends TestCase
     public function testXMLRulesRNG($rule,$odataVerision)
     {
        foreach($odataVerision as $version){
+
+            if(3 != $version){
+                continue;
+            }
+
            $this->XMLRulesRNGTest($rule,$version);
        }
     }
@@ -91,7 +96,7 @@ class XMLServiceDocumentTest extends TestCase
         $xsl = new DOMDocument();
         $xsl->loadXML( base64_decode($rule));
         $xslt->importStylesheet( $xsl );
-        $rng = $xslt->transformToXML( $xsl );
+        $rng = $xslt->transformToXML( $xml );
         try{
             $this->assertTrue($xml->relaxNGValidateSource($rng));
         }catch (Exception $e) {
@@ -105,6 +110,11 @@ class XMLServiceDocumentTest extends TestCase
     public function testXMLRulesXSLTRNG($rule,$odataVerision)
     {
        foreach($odataVerision as $version){
+
+            if(3 != $version){
+                continue;
+            }
+
            $this->XMLRulesXSLTRNGTest($rule,$version);
        }
 
@@ -134,6 +144,11 @@ class XMLServiceDocumentTest extends TestCase
     public function testHeaders($field,$Regex,$searchString,$odataVerision)
     {
        foreach($odataVerision as $version){
+
+            if(3 != $version){
+                continue;
+            }
+
            $this->HeadersTest($field,$Regex,$searchString,$version);
        }
 

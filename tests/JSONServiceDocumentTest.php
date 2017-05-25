@@ -12,6 +12,8 @@ class JSONServiceDocumentTest extends TestCase
 {
 
     public function GetServiceDocument($jsonLevel,$version){
+                $this->markTestSkipped("We are not doing json yet");
+
         if($jsonLevel != 'JsonLight' && $jsonLevel != 'json'){
             $jsonLevel = "verbose";
         }
