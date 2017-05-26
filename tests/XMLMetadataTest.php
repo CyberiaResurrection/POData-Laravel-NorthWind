@@ -7,8 +7,9 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class XMLMetadataTest extends TestCase
 {
 
-    public function GetMetadataDocument($version){
-        switch($version){
+    public function GetMetadataDocument($version)
+    {
+        switch($version) {
             case 1:
                 $version = "1.0;";
                 break;
@@ -37,24 +38,24 @@ class XMLMetadataTest extends TestCase
         $response = $this->GetMetadataDocument(1);
         $xml = new DOMDocument();
         $xml->loadXML($response->content());
-        $this->assertEquals("edmx:Edmx",$xml->firstChild->nodeName);
-        $this->assertEquals("http://schemas.microsoft.com/ado/2007/06/edmx",$xml->firstChild->namespaceURI);
-        $this->assertEquals("Version",$xml->firstChild->attributes[0]->name);
-        $this->assertEquals("1.0",$xml->firstChild->attributes[0]->value);
+        $this->assertEquals("edmx:Edmx", $xml->firstChild->nodeName);
+        $this->assertEquals("http://schemas.microsoft.com/ado/2007/06/edmx", $xml->firstChild->namespaceURI);
+        $this->assertEquals("Version", $xml->firstChild->attributes[0]->name);
+        $this->assertEquals("1.0", $xml->firstChild->attributes[0]->value);
         $dataServiceNode = null;
-        foreach($xml->firstChild->childNodes as $node){
-            if($node->nodeName != "edmx:DataServices"){
+        foreach ($xml->firstChild->childNodes as $node) {
+            if ($node->nodeName != "edmx:DataServices") {
                 continue;
             }
-            $this->assertEquals("http://schemas.microsoft.com/ado/2007/08/dataservices/metadata",$node->namespaceURI);
+            $this->assertEquals("http://schemas.microsoft.com/ado/2007/08/dataservices/metadata", $node->namespaceURI);
             $dataServiceNode = $node;
         }
         $this->assertNotNull($dataServiceNode, "DataServiceNode Not Found in metadata");
-        foreach($dataServiceNode->childNodes as $node){
-            if($node->nodeName != "Schema"){
+        foreach($dataServiceNode->childNodes as $node) {
+            if ($node->nodeName != "Schema") {
                 continue;
             }
-            $this->assertEquals("http://schemas.microsoft.com/ado/2006/04/edm",$node->namespaceURI);
+            $this->assertEquals("http://schemas.microsoft.com/ado/2006/04/edm", $node->namespaceURI);
         }
     }
 
@@ -71,16 +72,16 @@ class XMLMetadataTest extends TestCase
         $this->assertEquals("Version",$xml->firstChild->attributes[0]->name);
         $this->assertEquals("1.0",$xml->firstChild->attributes[0]->value);
         $dataServiceNode = null;
-        foreach($xml->firstChild->childNodes as $node){
-            if($node->nodeName != "edmx:DataServices"){
+        foreach ($xml->firstChild->childNodes as $node) {
+            if ($node->nodeName != "edmx:DataServices") {
                 continue;
             }
-            $this->assertEquals("http://schemas.microsoft.com/ado/2007/08/dataservices/metadata",$node->namespaceURI);
+            $this->assertEquals("http://schemas.microsoft.com/ado/2007/08/dataservices/metadata", $node->namespaceURI);
             $dataServiceNode = $node;
         }
         $this->assertNotNull($dataServiceNode, "DataServiceNode Not Found in metadata");
-        foreach($dataServiceNode->childNodes as $node){
-            if($node->nodeName != "Schema"){
+        foreach ($dataServiceNode->childNodes as $node) {
+            if ($node->nodeName != "Schema") {
                 continue;
             }
             $this->assertEquals("http://schemas.microsoft.com/ado/2008/09/edm",$node->namespaceURI);
@@ -99,16 +100,16 @@ class XMLMetadataTest extends TestCase
         $this->assertEquals("Version",$xml->firstChild->attributes[0]->name);
         $this->assertEquals("1.0",$xml->firstChild->attributes[0]->value);
         $dataServiceNode = null;
-        foreach($xml->firstChild->childNodes as $node){
-            if($node->nodeName != "edmx:DataServices"){
+        foreach ($xml->firstChild->childNodes as $node) {
+            if ($node->nodeName != "edmx:DataServices") {
                 continue;
             }
             $this->assertEquals("http://schemas.microsoft.com/ado/2007/08/DataServices/Metadata",$node->namespaceURI);
             $dataServiceNode = $node;
         }
         $this->assertNotNull($dataServiceNode, "DataServiceNode Not Found in metadata");
-        foreach($dataServiceNode->childNodes as $node){
-            if($node->nodeName != "Schema"){
+        foreach ($dataServiceNode->childNodes as $node) {
+            if ($node->nodeName != "Schema") {
                 continue;
             }
             $this->assertEquals("http://schemas.microsoft.com/ado/2009/11/edm",$node->namespaceURI);
@@ -127,16 +128,16 @@ class XMLMetadataTest extends TestCase
         $this->assertEquals("Version",$xml->firstChild->attributes[0]->name);
         $this->assertEquals("1.0",$xml->firstChild->attributes[0]->value);
         $dataServiceNode = null;
-        foreach($xml->firstChild->childNodes as $node){
-            if($node->nodeName != "edmx:DataServices"){
+        foreach ($xml->firstChild->childNodes as $node) {
+            if ($node->nodeName != "edmx:DataServices") {
                 continue;
             }
             $this->assertEquals("http://schemas.microsoft.com/ado/2007/08/dataservices/metadata",$node->namespaceURI);
             $dataServiceNode = $node;
         }
         $this->assertNotNull($dataServiceNode, "DataServiceNode Not Found in metadata");
-        foreach($dataServiceNode->childNodes as $node){
-            if($node->nodeName != "Schema"){
+        foreach ($dataServiceNode->childNodes as $node) {
+            if ($node->nodeName != "Schema") {
                 continue;
             }
             $this->assertEquals("http://docs.oasis-open.org/odata/ns/edm",$node->namespaceURI);
@@ -157,10 +158,10 @@ class XMLMetadataTest extends TestCase
         $xsl->loadXML( base64_decode($rule));
         $xslt->importStylesheet( $xsl );
         $rng = $xslt->transformToXML( $xml );
-        try{
+        try {
             $this->assertTrue($xml->relaxNGValidateSource($rng));
-        }catch (Exception $e) {
-            $this->fail($e->getMessage() . ' RelaxNG Input: ' . $rng);
+        } catch (Exception $e) {
+            $this->fail($e->getMessage() . '. RelaxNG Input: ' . $rng);
         }
     }
 
@@ -170,8 +171,8 @@ class XMLMetadataTest extends TestCase
      */
     public function testXMLRulesXSLTRNG($rule,$odataVersions)
     {
-        foreach($odataVersions as $version){
-            if(3 != $version){
+        foreach ($odataVersions as $version) {
+            if (3 != $version) {
                 continue;
             }
             $this->XMLRulesXSLTRNGTest($rule,$version);
@@ -193,27 +194,27 @@ class XMLMetadataTest extends TestCase
     }
 
 
-    public function HeadersTest($field,$Regex,$searchString,$odataVersion)
+    public function HeadersTest($field, $Regex, $searchString, $odataVersion)
     {
         $response = $this->GetMetadataDocument($odataVersion);
         $fieldValue = $response->headers->get($field);
-        if(null != $searchString){
-            $this->assertTrue(str_contains($fieldValue,$searchString),"could not locate search string: " . $searchString . " within Field: ". $field);
+        if (null != $searchString) {
+            $this->assertTrue(str_contains($fieldValue, $searchString),"could not locate search string: " . $searchString . " within Field: ". $field);
         }
-        $this->assertEquals(1,preg_match($Regex,$fieldValue),"Field: " . $field .' had value: ' . $fieldValue . " which is not matched by regex: " . $Regex);
+        $this->assertEquals(1,preg_match($Regex, $fieldValue),"Field: " . $field .' had value: ' . $fieldValue . " which is not matched by regex: " . $Regex);
     }
 
 
     /**
      * @dataProvider RegExHeaderRulesProvider
      */
-    public function testHeaders($field,$Regex,$searchString,$odataVersions)
+    public function testHeaders($field, $Regex, $searchString, $odataVersions)
     {
-        foreach($odataVersions as $version){
-            if(3 != $version){
+        foreach ($odataVersions as $version) {
+            if (3 != $version) {
                 continue;
             }
-            $this->HeadersTest($field,$Regex,$searchString,$version);
+            $this->HeadersTest($field, $Regex, $searchString, $version);
         }
     }
 

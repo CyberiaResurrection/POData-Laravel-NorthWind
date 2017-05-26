@@ -19,8 +19,10 @@ class XMLServiceDocumentTest extends TestCase
              ->see('xmlns="http://www.w3.org/2007/app"');
 
     }
-    public function GetServiceDocument($version){
-        switch($version){
+
+    public function getServiceDocument($version)
+    {
+        switch ($version) {
             case 1:
                 $version = "1.0;";
                 break;
@@ -41,31 +43,29 @@ class XMLServiceDocumentTest extends TestCase
         $this->assertEquals($version,$response->headers->get("DataServiceVersion"));
         return $response;
     }
-    public function XMLRulesRNGTest($rule,$odataVerision)
+
+    public function XMLRulesRNGTest($rule, $odataVersion)
     {
-        $response = $this->GetServiceDocument($odataVerision);
+        $response = $this->getServiceDocument($odataVersion);
         $xml = new DOMDocument();
         $xml->loadXML($response->content());
 
-        try{
+        try {
             $this->assertTrue($xml->relaxNGValidateSource(base64_decode($rule)));
-        }catch (Exception $e) {
-            $this->fail($e->getMessage() . 'RelaxNG Input: ' . base64_decode($rule));
+        } catch (Exception $e) {
+            $this->fail($e->getMessage() . '. RelaxNG Input: ' . base64_decode($rule));
         }
 
     }
 
 
-
-
     /**
      * @dataProvider RngRulesProvider
      */
-    public function testXMLRulesRNG($rule,$odataVerision)
+    public function testXMLRulesRNG($rule,$odataVersion)
     {
-       foreach($odataVerision as $version){
-
-            if(3 != $version){
+       foreach ($odataVersion as $version) {
+            if (3 != $version) {
                 continue;
             }
 
@@ -83,9 +83,9 @@ class XMLServiceDocumentTest extends TestCase
     }
 
 
-    public function XMLRulesXSLTRNGTest($rule,$odataVerision)
+    public function XMLRulesXSLTRNGTest($rule, $odataVersion)
     {
-        $response = $this->GetServiceDocument($odataVerision);
+        $response = $this->getServiceDocument($odataVersion);
 
         $xml = new DOMDocument();
         $xml->loadXML($response->content());
@@ -95,23 +95,22 @@ class XMLServiceDocumentTest extends TestCase
 
         $xsl = new DOMDocument();
         $xsl->loadXML( base64_decode($rule));
-        $xslt->importStylesheet( $xsl );
-        $rng = $xslt->transformToXML( $xml );
-        try{
+        $xslt->importStylesheet($xsl);
+        $rng = $xslt->transformToXML($xml);
+        try {
             $this->assertTrue($xml->relaxNGValidateSource($rng));
-        }catch (Exception $e) {
-            $this->fail($e->getMessage() . 'RelaxNG Input: ' . $rng);
+        } catch (Exception $e) {
+            $this->fail($e->getMessage() . '. RelaxNG Input: ' . $rng);
         }
     }
 
     /**
      * @dataProvider XSLTRngRulesProvider
      */
-    public function testXMLRulesXSLTRNG($rule,$odataVerision)
+    public function testXMLRulesXSLTRNG($rule, $odataVersion)
     {
-       foreach($odataVerision as $version){
-
-            if(3 != $version){
+       foreach ($odataVersion as $version) {
+            if (3 != $version) {
                 continue;
             }
 
@@ -127,13 +126,12 @@ class XMLServiceDocumentTest extends TestCase
         ];
     }
 
-    public function HeadersTest($field,$Regex,$searchString,$odataVerision)
+    public function HeadersTest($field, $Regex, $searchString, $odataVersion)
     {
-
-        $response = $this->GetServiceDocument($odataVerision);
+        $response = $this->getServiceDocument($odataVersion);
         $fieldValue = $response->headers->get($field);
-        if(null != $searchString){
-            $this->assertTrue(str_contains($fieldValue,$searchString),"could not locate search string: " . $searchString . " within Field: ". $field);
+        if (null != $searchString) {
+            $this->assertTrue(str_contains($fieldValue,$searchString), "could not locate search string: " . $searchString . " within Field: ". $field);
         }
         $this->assertEquals(1,preg_match($Regex,$fieldValue),"Field: " . $field .' had value: ' . $fieldValue . " which is not matched by regex: " . $Regex);
     }
@@ -141,15 +139,14 @@ class XMLServiceDocumentTest extends TestCase
     /**
      * @dataProvider RegExHeaderRulesProvider
      */
-    public function testHeaders($field,$Regex,$searchString,$odataVerision)
+    public function testHeaders($field, $Regex, $searchString, $odataVersion)
     {
-       foreach($odataVerision as $version){
-
-            if(3 != $version){
+       foreach ($odataVersion as $version) {
+            if(3 != $version) {
                 continue;
             }
 
-           $this->HeadersTest($field,$Regex,$searchString,$version);
+           $this->HeadersTest($field, $Regex, $searchString, $version);
        }
 
     }

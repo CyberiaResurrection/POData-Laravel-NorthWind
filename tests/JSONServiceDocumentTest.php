@@ -11,13 +11,13 @@ use JsonSchema\Constraints\Constraint;
 class JSONServiceDocumentTest extends TestCase
 {
 
-    public function GetServiceDocument($jsonLevel,$version){
-                $this->markTestSkipped("We are not doing json yet");
+    public function GetServiceDocument($jsonLevel,$version) {
+        $this->markTestSkipped("We are not doing json yet");
 
-        if($jsonLevel != 'JsonLight' && $jsonLevel != 'json'){
+        if($jsonLevel != 'JsonLight' && $jsonLevel != 'json') {
             $jsonLevel = "verbose";
         }
-        switch($version){
+        switch ($version) {
             case 1:
                 $version = "1.0;";
                 break;
@@ -35,19 +35,20 @@ class JSONServiceDocumentTest extends TestCase
                 $this->fail("Requested a version not between 1 and 4");
         }
         $response = $this->call('GET', '/odata.svc',[],[],[],["HTTP_ACCEPT" => "application/json;odata=" . $jsonLevel , "DataServiceVersion" => $version, "MaxDataServiceVersion" =>  $version]);
-        $this->assertEquals($version,$response->headers->get("DataServiceVersion"));
+        $this->assertEquals($version, $response->headers->get("DataServiceVersion"));
 
         return $response;
     }
 
-    public function JsonRulesTest($rule,$jsonType,$odataVerision){
-        $rule= base64_decode($rule);
-        $response = $this->GetServiceDocument($jsonType,$odataVerision);
+    public function JsonRulesTest($rule, $jsonType, $odataVersion)
+    {
+        $rule = base64_decode($rule);
+        $response = $this->GetServiceDocument($jsonType,$odataVersion);
         $content = $response->content();
         $validator = new JsonSchema\Validator;
 
         $validator->validate($content, $rule);
-        $this->assertNotNull(json_decode ($content), "The Content Returned Was Not Valid Json");
+        $this->assertNotNull(json_decode($content), "The Content Returned Was Not Valid Json");
 
         $message = "JSON does not validate. Violations:\n";
         if(!$validator->isValid()){
@@ -61,10 +62,10 @@ class JSONServiceDocumentTest extends TestCase
     /**
      * @dataProvider JsonSchemaRulesProvider
      */
-    public function testJsonRules($rule,$jsonType,$odataVerisions)
+    public function testJsonRules($rule, $jsonType, $odataVersions)
     {
-        foreach($odataVerisions as $version){
-            $this->JsonRulesTest($rule,$jsonType,$version);
+        foreach($odataVersions as $version) {
+            $this->JsonRulesTest($rule, $jsonType, $version);
         }
     }
 
@@ -115,14 +116,14 @@ class JSONServiceDocumentTest extends TestCase
     }*/
 
 
-    public function HeadersTest($field,$Regex,$searchString,$odataVerision)
+    public function HeadersTest($field, $Regex, $searchString, $odataVersion)
     {
-        $response = $this->GetServiceDocument("verbose",$odataVerision);
+        $response = $this->GetServiceDocument("verbose", $odataVersion);
         $fieldValue = $response->headers->get($field);
         if(null != $searchString){
-            $this->assertTrue(str_contains($fieldValue,$searchString),"could not locate search string: " . $searchString . " within Field: ". $field . " FieldValue: " . $fieldValue);
+            $this->assertTrue(str_contains($fieldValue, $searchString),"could not locate search string: " . $searchString . " within Field: ". $field . " FieldValue: " . $fieldValue);
         }
-        $this->assertEquals(1,preg_match($Regex,$fieldValue),"Field: " . $field .' had value: ' . $fieldValue . " which is not matched by regex: " . $Regex);
+        $this->assertEquals(1,preg_match($Regex, $fieldValue),"Field: " . $field .' had value: ' . $fieldValue . " which is not matched by regex: " . $Regex);
     }
 
 
@@ -130,10 +131,10 @@ class JSONServiceDocumentTest extends TestCase
      * @dataProvider RegExHeaderRulesProvider
      */
 
-    public function testHeaders($field,$Regex,$searchString,$odataVerisions)
+    public function testHeaders($field, $Regex, $searchString, $odataVersions)
     {
-        foreach($odataVerisions as $version){
-            $this->HeadersTest($field,$Regex,$searchString,$version);
+        foreach ($odataVersions as $version) {
+            $this->HeadersTest($field, $Regex, $searchString, $version);
         }
     }
 
