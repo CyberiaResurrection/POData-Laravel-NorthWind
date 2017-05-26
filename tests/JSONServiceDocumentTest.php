@@ -11,10 +11,11 @@ use JsonSchema\Constraints\Constraint;
 class JSONServiceDocumentTest extends TestCase
 {
 
-    public function GetServiceDocument($jsonLevel,$version) {
+    public function GetServiceDocument($jsonLevel, $version)
+    {
         $this->markTestSkipped("We are not doing json yet");
 
-        if($jsonLevel != 'JsonLight' && $jsonLevel != 'json') {
+        if ($jsonLevel != 'JsonLight' && $jsonLevel != 'json') {
             $jsonLevel = "verbose";
         }
         switch ($version) {
@@ -34,7 +35,15 @@ class JSONServiceDocumentTest extends TestCase
             default:
                 $this->fail("Requested a version not between 1 and 4");
         }
-        $response = $this->call('GET', '/odata.svc',[],[],[],["HTTP_ACCEPT" => "application/json;odata=" . $jsonLevel , "DataServiceVersion" => $version, "MaxDataServiceVersion" =>  $version]);
+        $response = $this->call(
+            'GET',
+            '/odata.svc',
+            [],
+            [],
+            [],
+            ["HTTP_ACCEPT" => "application/json;odata=" . $jsonLevel ,
+                "DataServiceVersion" => $version, "MaxDataServiceVersion" =>  $version]
+        );
         $this->assertEquals($version, $response->headers->get("DataServiceVersion"));
 
         return $response;
@@ -43,7 +52,7 @@ class JSONServiceDocumentTest extends TestCase
     public function JsonRulesTest($rule, $jsonType, $odataVersion)
     {
         $rule = base64_decode($rule);
-        $response = $this->GetServiceDocument($jsonType,$odataVersion);
+        $response = $this->GetServiceDocument($jsonType, $odataVersion);
         $content = $response->content();
         $validator = new JsonSchema\Validator;
 
@@ -51,10 +60,10 @@ class JSONServiceDocumentTest extends TestCase
         $this->assertNotNull(json_decode($content), "The Content Returned Was Not Valid Json");
 
         $message = "JSON does not validate. Violations:\n";
-        if(!$validator->isValid()){
+        if (!$validator->isValid()) {
             $message .= sprintf("[%s] %s\n", $error['property'], $error['message']);
         }
-        $this->assertTrue($validator->isValid(),$message . "\n ValidationData: " . $rule);
+        $this->assertTrue($validator->isValid(), $message . "\n ValidationData: " . $rule);
 
 
     }
@@ -64,7 +73,7 @@ class JSONServiceDocumentTest extends TestCase
      */
     public function testJsonRules($rule, $jsonType, $odataVersions)
     {
-        foreach($odataVersions as $version) {
+        foreach ($odataVersions as $version) {
             $this->JsonRulesTest($rule, $jsonType, $version);
         }
     }
@@ -120,10 +129,17 @@ class JSONServiceDocumentTest extends TestCase
     {
         $response = $this->GetServiceDocument("verbose", $odataVersion);
         $fieldValue = $response->headers->get($field);
-        if(null != $searchString){
-            $this->assertTrue(str_contains($fieldValue, $searchString),"could not locate search string: " . $searchString . " within Field: ". $field . " FieldValue: " . $fieldValue);
+        if (null != $searchString) {
+            $this->assertTrue(
+                str_contains($fieldValue, $searchString),
+                "could not locate search string: " . $searchString . " within Field: ". $field . " FieldValue: " . $fieldValue
+            );
         }
-        $this->assertEquals(1,preg_match($Regex, $fieldValue),"Field: " . $field .' had value: ' . $fieldValue . " which is not matched by regex: " . $Regex);
+        $this->assertEquals(
+            1,
+            preg_match($Regex, $fieldValue),
+            "Field: " . $field .' had value: ' . $fieldValue . " which is not matched by regex: " . $Regex
+        );
     }
 
 
