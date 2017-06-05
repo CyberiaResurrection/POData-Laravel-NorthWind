@@ -146,10 +146,11 @@ return [
         App\Providers\RouteServiceProvider::class,
         AlgoWeb\PODataLaravel\Providers\MetadataProvider::class,
         AlgoWeb\PODataLaravel\Providers\QueryProvider::class,
-Way\Generators\GeneratorsServiceProvider::class,
-Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider::class,
-Orangehill\Iseed\IseedServiceProvider::class,
-Mpociot\LaravelTestFactoryHelper\TestFactoryHelperServiceProvider::class,
+        AlgoWeb\PODataLaravel\Providers\MetadataRouteProvider::class,
+        Way\Generators\GeneratorsServiceProvider::class,
+        Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider::class,
+        Orangehill\Iseed\IseedServiceProvider::class,
+        Mpociot\LaravelTestFactoryHelper\TestFactoryHelperServiceProvider::class,
     ],
 
     /*

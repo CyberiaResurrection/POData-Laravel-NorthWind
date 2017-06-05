@@ -1,8 +1,11 @@
 <?php
 
+use App\User;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Route;
+use Mockery as m;
 
 class XMLServiceDocumentTest extends TestCase
 {
@@ -13,7 +16,9 @@ class XMLServiceDocumentTest extends TestCase
      */
     public function testCheckToSeeNameSpaces()
     {
-        $this->visit('/odata.svc')
+        $user = new User();
+
+        $this->actingAs($user)->visit('/odata.svc')
              ->see('xmlns:atom="http://www.w3.org/2005/Atom"')
              ->see('xml:base="http://localhost/odata.svc/"')
              ->see('xmlns="http://www.w3.org/2007/app"');
