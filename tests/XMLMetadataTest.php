@@ -1,5 +1,6 @@
 <?php
 
+use App\User;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -7,8 +8,9 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class XMLMetadataTest extends TestCase
 {
 
-    public function GetMetadataDocument($version)
+    public function getMetadataDocument($version)
     {
+        $user = new User();
         switch ($version) {
             case 1:
                 $version = "1.0;";
@@ -20,13 +22,13 @@ class XMLMetadataTest extends TestCase
                 $version = "3.0;";
                 break;
             case 4:
-                $this->markTestSkipped("Odata Version 4 not implomented yet");
+                $this->markTestSkipped("Odata Version 4 not implemented yet");
                 $version = "4.0;";
                 break;
             default:
                 $this->fail("Requested a version not between 1 and 4");
         }
-        $response = $this->call(
+        $response = $this->actingAs($user)->call(
             'GET',
             '/odata.svc/$metadata',
             [],
@@ -42,7 +44,7 @@ class XMLMetadataTest extends TestCase
     {
         $this->markTestSkipped("Odata Version not implomented yet");
 
-        $response = $this->GetMetadataDocument(1);
+        $response = $this->getMetadataDocument(1);
         $xml = new DOMDocument();
         $xml->loadXML($response->content());
         $this->assertEquals("edmx:Edmx", $xml->firstChild->nodeName);
@@ -71,7 +73,7 @@ class XMLMetadataTest extends TestCase
     {
         $this->markTestSkipped("Odata Version not implomented yet");
 
-        $response = $this->GetMetadataDocument(2);
+        $response = $this->getMetadataDocument(2);
         $xml = new DOMDocument();
         $xml->loadXML($response->content());
         $this->assertEquals("edmx:Edmx", $xml->firstChild->nodeName);
@@ -99,7 +101,7 @@ class XMLMetadataTest extends TestCase
     {
         $this->markTestSkipped("test buggy");
 
-        $response = $this->GetMetadataDocument(3);
+        $response = $this->getMetadataDocument(3);
         $xml = new DOMDocument();
         $xml->loadXML($response->content());
         $this->assertEquals("edmx:Edmx", $xml->firstChild->nodeName);
@@ -127,7 +129,7 @@ class XMLMetadataTest extends TestCase
     {
         $this->markTestSkipped("Odata Version not implomented yet");
 
-        $response = $this->GetMetadataDocument(4);
+        $response = $this->getMetadataDocument(4);
         $xml = new DOMDocument();
         $xml->loadXML($response->content());
         $this->assertEquals("edmx:Edmx", $xml->firstChild->nodeName);
@@ -153,7 +155,7 @@ class XMLMetadataTest extends TestCase
 
     public function XMLRulesXSLTRNGTest($rule, $odataVersion)
     {
-        $response = $this->GetMetadataDocument($odataVersion);
+        $response = $this->getMetadataDocument($odataVersion);
 
         $xml = new DOMDocument();
         $xml->loadXML($response->content());

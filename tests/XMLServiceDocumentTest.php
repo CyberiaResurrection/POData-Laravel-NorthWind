@@ -27,6 +27,7 @@ class XMLServiceDocumentTest extends TestCase
 
     public function getServiceDocument($version)
     {
+        $user = new User();
         switch ($version) {
             case 1:
                 $version = "1.0;";
@@ -44,7 +45,7 @@ class XMLServiceDocumentTest extends TestCase
             default:
                 $this->fail("Requested a version not between 1 and 4");
         }
-        $response = $this->call(
+        $response = $this->actingAs($user)->call(
             'GET',
             '/odata.svc',
             [],
